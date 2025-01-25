@@ -52,8 +52,8 @@ public class InnerVideoDecoder
         demuxer.Enable(videoStream);
         
         HWFramesContext? hwFrames = null;
-        HWDeviceContext hwDevice = new HWDeviceContext(AVHWDeviceType.D3d11va, "0");
-        AVPixelFormat hwPixelFormat = HWDeviceSpec.FindHWPixelFormat(AVHWDeviceType.D3d11va);
+        HWDeviceContext hwDevice = new HWDeviceContext(AVHWDeviceType.Vulkan, "0");
+        AVPixelFormat hwPixelFormat = HWDeviceSpec.FindHWPixelFormat(AVHWDeviceType.Vulkan);
         VideoDecoderSpec videoCodec = CodecSpec.FindHWVideoDecoder(videoStream.CodecId, hwPixelFormat) ??
                                       throw new Exception("No decoder found");
         //videoCodec = CodecSpec.FindVideoDecoder(videoStream.CodecId) ?? throw new Exception("No decoder found");
@@ -149,8 +149,8 @@ public class InnerVideoDecoder
                 
                 //calc wait time based on how long it took to read the packet and put the frame compared to the frame time
                 timeToWait = frameTime - (Stopwatch.GetTimestamp() - readStart);
-                if (timeToWait > 0)
-                    await Task.Delay(TimeSpan.FromTicks(timeToWait));
+                //if (timeToWait > 0)
+                //    await Task.Delay(TimeSpan.FromTicks(timeToWait));
             }
         });
     }

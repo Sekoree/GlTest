@@ -55,7 +55,9 @@ public class Game : GameWindow
             this.Close();
     }
 
-    static int textUnit = 0;
+    
+    private int _fps = 0;
+    private long _lastTime = 0;
     
     protected override void OnRenderFrame(FrameEventArgs args)
     {
@@ -96,6 +98,14 @@ public class Game : GameWindow
         //Console.WriteLine($"Draw: {TimeSpan.FromTicks(afterDraw - afterTexture).TotalMilliseconds}ms");
         //Console.WriteLine($"Swap: {TimeSpan.FromTicks(endTime - afterDraw).TotalMilliseconds}ms");
         //Console.WriteLine($"Total: {TimeSpan.FromTicks(endTime - startTime).TotalMilliseconds}ms");
+        
+        _fps++;
+        if (Stopwatch.GetTimestamp() - _lastTime > Stopwatch.Frequency)
+        {
+            Console.WriteLine($"FPS: {_fps}");
+            _fps = 0;
+            _lastTime = Stopwatch.GetTimestamp();
+        }
     }
 
     protected override async void OnLoad()
@@ -114,12 +124,12 @@ public class Game : GameWindow
         _vertexBufferObject = GL.GenBuffer();
         GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
         GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices,
-            BufferUsageHint.DynamicDraw);
+            BufferUsageHint.StreamDraw);
 
         _elementBufferObject = GL.GenBuffer();
         GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
         GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices,
-            BufferUsageHint.DynamicDraw);
+            BufferUsageHint.StreamDraw);
 
         // The shaders have been modified to include the texture coordinates, check them out after finishing the OnLoad function.
         _shader = new Shader("shader.vert", "shader.frag");
