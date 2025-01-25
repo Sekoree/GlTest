@@ -1,5 +1,3 @@
-#version 100 
-
 attribute vec3 Position;
 
 void main()

@@ -19,13 +19,13 @@ public static class GlExtensions
             Console.WriteLine($"{sourceFilePath}.{memberName}:{sourceLineNumber} 0x{err:X}");
     }
 
-    public static string GetShader(GlVersion glVersion, bool fragment, string shader)
+    public static string GetShader(GlVersion glversion, bool fragment, string shader)
     {
-        int version = (glVersion.Type == GlProfileType.OpenGL ?
-            RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? 150 : 120 :
-            100);
-        string data = "#version " + version + "\n";
-        if (glVersion.Type == GlProfileType.OpenGLES)
+        var version = (glversion.Type == GlProfileType.OpenGL
+            ? RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? 150 : 120
+            : 100);
+        var data = "#version " + version + "\n";
+        if (glversion.Type == GlProfileType.OpenGLES)
             data += "precision mediump float;\n";
         if (version >= 150)
         {

@@ -14,15 +14,13 @@ public class TestGlControl : OpenGlControlBase
     private int _vertexShader;
     private int _fragmentShader;
     private int _shaderProgram;
-    private readonly string _fragShaderSource;
-    private readonly string _vertShaderSource;
+    private string _fragShaderSource;
+    private string _vertShaderSource;
 
     public TestGlControl()
     {
-        var fragShaderSource = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "shader.frag"));
-        _fragShaderSource = fragShaderSource;//GlExtensions.GetShader(GlVersion, true, fragShaderSource);
-        var vertShaderSource = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "shader.vert"));
-        _vertShaderSource = vertShaderSource; //GlExtensions.GetShader(GlVersion, false, vertShaderSource);
+        _fragShaderSource = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "shader.frag"));
+        _vertShaderSource = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "shader.vert"));
     }
 
     protected override void OnOpenGlInit(GlInterface gl)
@@ -30,6 +28,9 @@ public class TestGlControl : OpenGlControlBase
         base.OnOpenGlInit(gl);
 
         _shaderProgram = gl.CreateProgram();
+        
+        _fragShaderSource = GlExtensions.GetShader(GlVersion, true, _fragShaderSource);
+        _vertShaderSource = GlExtensions.GetShader(GlVersion, false, _vertShaderSource);
 
         _vertexShader = gl.CreateShader(GL_VERTEX_SHADER);
         Console.WriteLine(gl.CompileShaderAndGetError(_vertexShader, _vertShaderSource));
